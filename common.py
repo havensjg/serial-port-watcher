@@ -1,4 +1,7 @@
+from PIL import Image
+import pystray
 import serial.tools.list_ports
+import threading
 
 # Common logic for all platforms
 class SerialPortWatcher:
@@ -6,16 +9,55 @@ class SerialPortWatcher:
     # Constructor 
     def __init__(self):
         # Initialize fields
-        self.closeRequested = False
+        self.exitRequested = False
         self.lastPorts = serial.tools.list_ports.comports()
 
         # For debug purposes, print the serial ports already attached
         portList = [port.device for port in self.lastPorts]
         print(f"Ports already attached: {portList}")
 
+        # Initialize tray icon and menu
+        self.initMenu()
+
     # Clean up any resources before closing
     def cleanup(self):
-        pass
+        # Clean up the tray icon
+        if self.icon:
+            self.icon.stop()
+
+        # Join the tray icon thread
+        if self.iconThread:
+            self.iconThread.join()
+
+    # Initialize tray icon and menu
+    def initMenu(self):
+        # TODO: Load icon, for now red square
+        image = Image.new("RGB", (64, 64), color="red")
+
+        # Set up menu
+        menu = pystray.Menu(
+            pystray.MenuItem("Exit", lambda icon, item: self.menuExit())
+        )
+
+        # Set up icon
+        self.icon = pystray.Icon(
+            name="Serial Port Watcher",
+            icon=image,
+            title="Serial Port Watcher",
+            menu=menu
+        )
+
+        # Create thread for icon loop
+        self.iconThread = threading.Thread(
+            target=lambda icon: icon.run(),
+            args=[self.icon]
+        )
+        self.iconThread.start()
+
+    # Called when the "Exit" item is used on the tray menu
+    def menuExit(self):
+        print("Exit requested")
+        self.exitRequested = True
 
     # Called when a device tree change has been made. Re-enumerates the serial ports and notifies on any changes
     def notify(self):
@@ -50,14 +92,26 @@ class SerialPortWatcher:
 
     # Notify that a device was attached
     def notifyAttach(self, port):
+        # Log details
         print(f"{port.device} attach")
         print(f"    Name: {port.name}")
         print(f"    Description: {port.description}")
         print(f"    Hardware ID: {port.hwid}")
 
+        # Popup
+        self.popup(f"{port.name} attached", port.description)
+
     # Notify that a device was detached
     def notifyDetach(self, port):
+        # Log details
         print(f"{port.device} detach")
         print(f"    Name: {port.name}")
         print(f"    Description: {port.description}")
         print(f"    Hardware ID: {port.hwid}")
+
+        # Popup
+        self.popup(f"{port.name} detached", port.description)
+
+    # Popup message
+    def popup(self, title, message):
+        self.icon.notify(message, title=title)

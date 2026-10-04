@@ -3,7 +3,7 @@ VENV=.venv
 # Check if venv exists. If it doesn't create it and install the packages
 if [ ! -d "$VENV" ]; then
     # Create the venv
-    python -m venv .venv
+    python -m venv --system-site-packages .venv
 
     # Activate that venv
     source .venv/bin/activate

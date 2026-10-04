@@ -39,9 +39,14 @@ def linux_main():
 
     # Idle loop
     try:
-        while not watcher.closeRequested:
+        # Loop while exit isn't requested
+        while not watcher.exitRequested:
             time.sleep(1)
+
+        # Loop exited normally (user clicked Exit), stop the observer
+        observer.stop()
     except KeyboardInterrupt:
+        # Ctrl-C was pressed, stop the observer
         observer.stop()
 
     # Wait for observer to exit
