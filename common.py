@@ -2,6 +2,7 @@ from PIL import Image
 import pystray
 import serial.tools.list_ports
 import threading
+import webbrowser
 
 # Common logic for all platforms
 class SerialPortWatcher:
@@ -42,7 +43,15 @@ class SerialPortWatcher:
             image = Image.new("RGB", (64, 64), color="red")
 
         # Set up menu
+        about_menu = pystray.Menu(
+            pystray.MenuItem("Serial Port Watcher", lambda icon, item: None, enabled=False),
+            pystray.MenuItem("(c) 2026 Joseph Havens", lambda icon, item: None, enabled=False),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem("Visit GitHub repository", lambda icon, item: webbrowser.open("https://github.com/havensjg/serial-port-watcher"))
+        )
         menu = pystray.Menu(
+            pystray.MenuItem("About", about_menu),
+            pystray.Menu.SEPARATOR,
             pystray.MenuItem("Exit", lambda icon, item: self.menuExit())
         )
 
