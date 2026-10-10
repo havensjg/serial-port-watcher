@@ -31,8 +31,15 @@ class SerialPortWatcher:
 
     # Initialize tray icon and menu
     def initMenu(self):
-        # TODO: Load icon, for now red square
-        image = Image.new("RGB", (64, 64), color="red")
+        # Load icon, if that fails, just make it a red square
+        try:
+            # Try to load icon
+            image = Image.open("icon.png")
+            image.load()
+        except Exception as e:
+            # Loading icon failed for whatever reason, make a placeholder instead
+            print(e)
+            image = Image.new("RGB", (64, 64), color="red")
 
         # Set up menu
         menu = pystray.Menu(
