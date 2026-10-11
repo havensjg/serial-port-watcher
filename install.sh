@@ -29,7 +29,7 @@ if [ "$opt_help" -eq 1 ]; then
     echo ""
     echo "Options:"
     echo "  --help - Print this help message and perform no changes"
-    echo "  --auto-start - Enable the script to install when the user logs in"
+    echo "  --auto-start - Enable the script to run when the user logs in"
     exit 1
 fi
 
