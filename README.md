@@ -47,7 +47,7 @@ To launch the tool use the following commands:
 
 ### Windows
 ```
-./launch.bat
+.\launch.bat
 ```
 
 Upon executing one of the commands above, the tool will launch in the background. An icon will appear in the tray indicating that the tool is active.
