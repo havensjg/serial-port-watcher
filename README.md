@@ -14,24 +14,40 @@ Windows 10:
 
 ## Requirements
 
-The only requirement is a recent version of Python 3. PIP dependencies are installed automatically on first launch if needed.
+The only requirement is a recent version of Python 3. Pip dependencies are installed automatically on first launch if needed.
 
 ## Installation
 
 Clone the repository or download the ZIP file and extract. 
 
+If you wish to install an applications menu shortcut, use the following commands:
+
+### Linux
+Install just the shortcut (.desktop file) in the applications menu:
+```
+./install.sh
+```
+
+Install the shortcut and automatically start on log in:
+```
+./install.sh --auto-start
+```
+
+### Windows
+(an installer script is not available yet)
+
 ## Usage
 
 To launch the tool use the following commands:
 
-On Windows:
-```
-./launch.bat
-```
-
-On Linux:
+### Linux
 ```
 ./launch.sh
+```
+
+### Windows
+```
+./launch.bat
 ```
 
 Upon executing one of the commands above, the tool will launch in the background. An icon will appear in the tray indicating that the tool is active.
